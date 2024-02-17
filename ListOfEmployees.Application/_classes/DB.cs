@@ -28,13 +28,20 @@ namespace ListOfEmployees.Application._classes
             adapter.Fill(dataTable);
             return dataTable;
         }
-        public static void ExecuteSql(string sqlCommand)
+        public static void ExecuteSql(string sqlCommandText)
         {
-
+            SqlConnection connectionSQL = GetDBConnection();
+            SqlCommand sqlCommand = new SqlCommand(sqlCommandText, connectionSQL);
+            sqlCommand.ExecuteNonQuery();
         }
         public static void CloseDBConnection()
         {
-
+            string connectionString = Properties.Settings.Default.connection_String;
+            SqlConnection connectionSQL = new SqlConnection(connectionString);
+            if (connectionSQL.State != ConnectionState.Closed)
+            {
+                connectionSQL.Close();
+            }
         }
     }
 }
