@@ -12,15 +12,29 @@ namespace ListOfEmployees.Application._classes
     {
         public static SqlConnection GetDBConnection()
         {
-
+            string connectionString = Properties.Settings.Default.connection_String;
+            SqlConnection connectionSQL = new SqlConnection(connectionString);
+            if(connectionSQL.State != ConnectionState.Open)
+            {
+                connectionSQL.Open();
+            }
+            return connectionSQL;
         }
-        public static DataTable GetDataTable()
+        public static DataTable GetDataTable(string sqlCommand)
         {
-            SqlConnection connection = GetDBConnection();
+            SqlConnection connectionSQL = GetDBConnection();
             DataTable dataTable = new DataTable();
-            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand, connectionSQL);
             adapter.Fill(dataTable);
             return dataTable;
+        }
+        public static void ExecuteSql(string sqlCommand)
+        {
+
+        }
+        public static void CloseDBConnection()
+        {
+
         }
     }
 }
